@@ -1,0 +1,7 @@
+
+building a webapp
+
+-> aws amplify -> amazon API gateway -> AWS Lamda -> AWS dyanamo DB
+                                           |
+                                           |
+                                        AWS IAM

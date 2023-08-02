@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello World</title>
+        <style>
+            body{
+                background-color: #232F3E;
+            }
+            label,button{
+                color: #FF9900;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 20px;
+                margin-left: 40px;
+            }
+            input{
+                color: #232F3E;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 20px;
+                margin-left: 20px;
+            }
+        </style>
+        <script>
+            var callAPI=(firstname,lastname)=>{
+                var myHeaders= new Headers()
+                myHeaders.append("Content-Type","application/json")
+                //turn this object into string
+                var raw= JSON.stringify({"firstname":firstname,"lastname":lastname})
+                //create json objects with parameters for API call and store in variable
+                var requestOptions={
+                    method:'POST',
+                    headers:myHeaders,
+                    body:raw,
+                    redirect:'follow'
+
+                };
+                //make API call with params to use promises to get response
+                fetch("YOUR-API-INVOKE-URL",requestOptions)
+                .then(response=>response.text())
+                .then(result=>alert(JSON.parse(result).body))
+                .catch(error=>console.log('error',error))
+
+            }
+        </script>
+    </head>
+    <body>
+       <form>
+        <label>First Name:</label>
+        <input type="text" id="fName">
+        <label>Last Name:</label>
+        <input type="text" id="lName">
+        <button type="button" onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API</button>
+       </form>
+    </body>
+</html>
