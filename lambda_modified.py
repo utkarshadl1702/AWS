@@ -1,36 +1,35 @@
+# import the JSON utility package
 import json
-#import AWS SDK
+# import the Python math library
+import math
+
+# import the AWS SDK (for Python the package name is boto3)
 import boto3
+# import two packages to help us with dates and date formatting
+from time import gmtime, strftime
 
-from time import gtime,strftime
+# create a DynamoDB object using the AWS SDK
+dynamodb = boto3.resource('dynamodb')
+# use the DynamoDB object to select our table
+table = dynamodb.Table('Power_Function')
+# store the current time in a human readable format in a variable
+now = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
 
-#create dynamodb using AWS SDk
+# define the handler function that the Lambda service will use an entry point
+def lambda_handler(event, context):
 
-dynamodb=boto3.resource('dynamodb')
-#use this db object to select our table
-table=dynamodb.Table('HelloWorldDtbase')
-#store current table in human readable format
+# extract the two numbers from the Lambda service's event object
+    mathResult = math.pow(int(event['base']), int(event['exponent']))
 
-now=strftime("%a,%d %b %Y %H:%M:%S +0000",gtime())
-#define a handler function that act as entry point for lambda function
-
-def lambda_handler(event,context):
-    #extract values from table and store it in table
-    name=event["firstname"]+" "+event["lastname"]
-#write name and time to dynamodb using the object we initiated and save it in var
-    response=table.put_item(
+# write result and time to the DynamoDB table using the object we instantiated and save response in a variable
+    response = table.put_item(
         Item={
-            'ID':name,
+            'ID': str(mathResult),
             'LatestGreetingTime':now
-        
-        })
-    #return proper formatted data
-    return{
-        'statusCode':200,
-        'body':json.dumps('Hello from Lambda, '+name)
+            })
+
+# return a properly formatted JSON object
+    return {
+    'statusCode': 200,
+    'body': json.dumps('Your result is ' + str(mathResult))
     }
-
-
-
-  
-
